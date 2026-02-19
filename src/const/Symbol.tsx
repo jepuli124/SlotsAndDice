@@ -4,7 +4,7 @@ interface stringDict {
 
 const imagePaths: stringDict = {
     "4Leaf" : "./4LeafClover.png",
-    "5Lead" : "./5LeafClover.png",
+    "5Leaf" : "./5LeafClover.png",
     "BlackLily" : "./BlackPeaceLily.png",
     "Dice" : "./BlueDice.png",
     "Heart" : "./BurningHeart.png",
@@ -16,16 +16,16 @@ const imagePaths: stringDict = {
     "9" : "./Nine.png",
     "Blade" : "./PristineBlade.png",
     "Stick" : "./RedStick.png",
-    "6": "./six.png",
+    "6": "./Six.png",
     "Roller" : "./SlotRoller.png",
     "Slot" : "./SlotSlot.png",
-    "Star" : "./Star,.png",
+    "Star" : "./Star.png",
     "Glass" : "./WineGlass.png"
 }
 
 const imageNameList = [
     "4Leaf",
-    "5Lead",
+    "5Leaf",
     "BlackLily",
     "Dice",
     "Heart",
@@ -44,5 +44,23 @@ const imageNameList = [
     "Glass"
 ]
 
-export default { imagePaths, imageNameList }
+const slotSymbolList = [
+    "4Leaf",
+    "5Leaf",
+    "BlackLily",
+    "Dice",
+    "Heart",
+    "Box",
+    "Cherries",
+    "Coin",
+    "Feather",
+    "Nut",
+    "9",
+    "Blade",
+    "6",
+    "Star",
+    "Glass"
+]
+
+export default { imagePaths, imageNameList, slotSymbolList }
 export type { stringDict }

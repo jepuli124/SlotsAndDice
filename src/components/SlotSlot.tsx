@@ -1,22 +1,35 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import paths from '../const/Symbol'
 
-
-const SlotSlot: React.FC = () => {
-    const {imagePaths, imageNameList} = paths
-    const [Symbol, setSymbol] = useState<string>(imagePaths['4Leaf'])
-  
+interface incomingParams{
+    reroll: number
+}
+const SlotSlot: React.FC<incomingParams> = ({ reroll }) => {
+    const {imagePaths, slotSymbolList} = paths
+    const previousReroll = useRef<number>(reroll)
     const RandomSymbol = () => {
-        let name: string = imageNameList[Math.floor(Math.random() * Object.keys(imageNameList).length)]
-        if(name in Object.keys(imagePaths)){
-            setSymbol(imagePaths[name])
-        }   
-        
+        let name: string = slotSymbolList[Math.floor(Math.random() * Object.keys(slotSymbolList).length)]
+        console.log(name, imagePaths[name])
+        return imagePaths[name]
     }
+    const [Symbol, setSymbol] = useState<string>(RandomSymbol())
+  
+    if(previousReroll.current !== reroll){
+        previousReroll.current = reroll
+        setSymbol(RandomSymbol)
+    } 
+
     return (
-    <div>
-      <img src={imagePaths["Slot"]} alt="" />
-      <img src={Symbol} alt="" />
+    <div style={{ position: 'relative', display: 'inline-block', width: "100%", height: "auto"}}>
+      <img src={imagePaths["Slot"]} alt="" style={{ display: 'block', alignSelf: "center", width: "100%", height: "auto" }}/>
+      <img src={Symbol} alt=""  style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          maxWidth: '80%',
+          maxHeight: '80%' 
+        }}/>
     </div>
   )
 }
