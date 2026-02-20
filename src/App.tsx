@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import SlotMachine from './components/SlotMachine'
+import Dices from './components/Dices'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [mode, setMode] = useState(false)
 
   return (
     <>
-      <SlotMachine></SlotMachine>
+      <button onClick={() => setMode(mode => !mode)}>Change Mode</button>
+      {mode ? <Dices></Dices> : <SlotMachine></SlotMachine>}
+      
     </>
   )
 }

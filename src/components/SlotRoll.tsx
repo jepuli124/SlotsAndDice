@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import SlotSlot from './SlotSlot'
+import '../css/SlotMachine.css'
 
 interface incomingParams {
-  reroll: number
+  symbols?: string[]
+
 }
 
-const SlotRoll: React.FC<incomingParams> = ({reroll}) => {
+const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
+  const preSymbols = useRef(symbols)
+
+  if(preSymbols.current !== symbols){
+    
+  }
+
   return (
     <div style={{ 
       position: 'relative', 
@@ -33,7 +41,7 @@ const SlotRoll: React.FC<incomingParams> = ({reroll}) => {
       }}>
         {[1, 2, 3].map((_, index) => (
           <div key={index} style={{ width: '80%', display: 'flex', justifyContent: 'center' }}>
-            <SlotSlot reroll={reroll}/>
+            <SlotSlot Symbol={symbols ? symbols[index] : undefined}/>
           </div>
         ))}
       </div>
