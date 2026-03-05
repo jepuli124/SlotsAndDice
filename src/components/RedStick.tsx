@@ -15,8 +15,8 @@ const RedStick: React.FC<incomingParams> = ({ spin = () => {} }) => {
             clearTimeout(rotateTimeout)
         }, 150)
         spin()
-        }} style={{rotate: rotate ? '180deg' : '0deg', transition: "transform 150ms ease"}}>
-      <img src="./RedStick.png" alt="red stick" />
+        }} style={{ rotate: rotate ? '180deg' : '0deg', transition: "transform 150ms ease"}}>
+      <img src="./RedStick.png" alt="red stick" style={{height: "25vw"}}/>
     </div>
   )
 }

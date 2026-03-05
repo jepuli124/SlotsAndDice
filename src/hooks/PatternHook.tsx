@@ -19,7 +19,7 @@ export class PatternDetector {
     // Diagonal patterns
     { positions: [[2,0], [1,1], [2,2], [3,1]], name: 'Diamond' },
     { positions: [[1,0], [0,1], [1,2], [2,1]], name: 'Left Diamond' },
-    { positions: [[2,0], [1,1], [2,2], [3,1]], name: 'Right Diamond' },
+    { positions: [[3,0], [2,1], [3,2], [4,1]], name: 'Right Diamond' },
     
     // Zigzag patterns
     { positions: [[0,0], [1,1], [2,0], [3,1], [4,0]], name: 'Zigzag Top' },
@@ -127,9 +127,18 @@ export class PatternDetector {
       } else {
         // Check for sequences (3,4 of a kind)
         const sequence = this.findLongestSequence(symbols);
-        if (sequence.length >= 3) {
+        if (sequence.length >= 3 && !line.name.includes("Diamond")) {
           const multiplier = sequence.length === 3 ? 2 : 
                            sequence.length === 4 ? 5 : 10;
+          wins.push({
+            pattern: `${sequence.length} in a Row - ${line.name}`,
+            symbols: sequence,
+            multiplier,
+            description: `${sequence.length} matching symbols on ${line.name}!`
+          });
+        }
+        if(sequence.length >= 4 && line.name.includes("Diamond")){
+          const multiplier = sequence.length === 4 ? 5 : 1;
           wins.push({
             pattern: `${sequence.length} in a Row - ${line.name}`,
             symbols: sequence,

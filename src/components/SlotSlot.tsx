@@ -1,11 +1,19 @@
 import React from 'react'
 import paths from '../const/Symbol'
+import { RandomCommonSymbol } from '../hooks/RNGSymbolHook'
 
 interface incomingParams{
     Symbol?: string
 }
 const SlotSlot: React.FC<incomingParams> = ({ Symbol }) => {
     const {imagePaths} = paths
+
+
+    //const [symbol, setSymbol] = useState<string>(symbol ?? RandomCommonSymbol())
+    if(Symbol == undefined){
+      Symbol = RandomCommonSymbol()
+    }
+
 
 
     return (

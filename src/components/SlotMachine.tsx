@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react'
 import SlotRoll from './SlotRoll'
 import RedStick from './RedStick'
-import paths from '../const/Symbol'
 import { PatternDetector } from '../hooks/PatternHook'
 import { getFromStore } from '../hooks/StorageHook'
+import { RandomCommonSymbol, RandomRareSymbol, RandomSymbol } from '../hooks/RNGSymbolHook'
 
 const ColumnCount = 5 // how many colums are in the slot machine.
 const SlotCount = 3 // how many slots are in the slot machine.
@@ -40,25 +40,9 @@ const SlotMachine: React.FC = () => {
   
 
   const LoS = useRef<number>(LosCheck()) 
-  const { commonSlotSymbolList, rareSlotSymbolList} = paths
   const [symbols, setSymbol] = useState<string[][] | undefined>(undefined)
 
-  const RandomSymbol = () => {
-      if(Math.random() * LoS.current >= 6) {
-        return RandomRareSymbol()
-      }
-      return RandomCommonSymbol()
-  }
-
-  const RandomCommonSymbol = () => {
-      let name: string = commonSlotSymbolList[Math.floor(Math.random() * Object.keys(commonSlotSymbolList).length)]
-      return name
-  }
-
-  const RandomRareSymbol = () => {
-      let name: string = rareSlotSymbolList[Math.floor(Math.random() * (LoS.current - 2))]
-      return name
-  }
+  
 
   const checkForPatterns = (lines: string [][]) => {
     const detector = new PatternDetector(lines)
@@ -69,9 +53,12 @@ const SlotMachine: React.FC = () => {
   // const lightshow = () => {
 
   // }
+  const newSymbolsArray = () => {
+    return [Array(SlotCount), Array(SlotCount), Array(SlotCount), Array(SlotCount), Array(SlotCount)]
+  }
 
   const fillWithChosenSymbols = (symbols: string[]) => {
-    const newSymbols: string[][] = [Array(5), Array(5), Array(5), Array(5), Array(5)]
+    const newSymbols: string[][] = newSymbolsArray()
     for (let column = 0; column < ColumnCount; column++) {
         for (let slot = 0; slot < SlotCount; slot++) {
           newSymbols[column][slot] = symbols[Math.floor(Math.random() * Object.keys(symbols).length)]
@@ -80,7 +67,7 @@ const SlotMachine: React.FC = () => {
     return newSymbols
   }
   const fillAllWith = (name = RandomCommonSymbol()) => {
-    const newSymbols: string[][] = [Array(5), Array(5), Array(5), Array(5), Array(5)]
+    const newSymbols: string[][] = newSymbolsArray()
     for (let column = 0; column < ColumnCount; column++) {
         for (let slot = 0; slot < SlotCount; slot++) {
           newSymbols[column][slot] = name
@@ -90,16 +77,16 @@ const SlotMachine: React.FC = () => {
   }
 
   const randomSlots = () => {
-    const newSymbols: string[][] = [Array(5), Array(5), Array(5), Array(5), Array(5)]
+    const newSymbols: string[][] = newSymbolsArray()
     for (let column = 0; column < ColumnCount; column++) {
         for (let slot = 0; slot < SlotCount; slot++) {
-          newSymbols[column][slot] = RandomSymbol()
+          newSymbols[column][slot] = RandomSymbol(LoS.current)
         }
       }
     return newSymbols
   }
   const randomCommonSlots = () => {
-    const newSymbols: string[][] = [Array(5), Array(5), Array(5), Array(5), Array(5)]
+    const newSymbols: string[][] = newSymbolsArray()
     for (let column = 0; column < ColumnCount; column++) {
         for (let slot = 0; slot < SlotCount; slot++) {
           newSymbols[column][slot] = RandomCommonSymbol()
@@ -108,10 +95,10 @@ const SlotMachine: React.FC = () => {
     return newSymbols
   }
   const randomRareSlots = () => {
-    const newSymbols: string[][] = [Array(5), Array(5), Array(5), Array(5), Array(5)]
+    const newSymbols: string[][] = newSymbolsArray()
     for (let column = 0; column < ColumnCount; column++) {
         for (let slot = 0; slot < SlotCount; slot++) {
-          newSymbols[column][slot] = RandomRareSymbol()
+          newSymbols[column][slot] = RandomRareSymbol(LoS.current)
         }
       }
     return newSymbols
@@ -156,6 +143,7 @@ const SlotMachine: React.FC = () => {
     }
     checkForPatterns(newSymbols)
     setSymbol(newSymbols)
+    //console.log(newSymbols)
   } 
 
 
@@ -164,8 +152,8 @@ const SlotMachine: React.FC = () => {
   }
   
   return (
-    <div style={{justifyItems: "center", width: "99vw"}}>
-      <div style={{ display: 'flex', width: "100%", height: "auto"}}>
+    <div style={{display: 'flex',justifyItems: "center", width: "99vw", height: "auto"}}>
+      <div style={{ display: 'flex', width: "85%", height: "auto"}}>
       {columnlist.map((_, index) => (
           <div key={index} style={{maxWidth: "20%", height: "auto" }}>
             <SlotRoll symbols={symbols ? symbols[index] : undefined}></SlotRoll>
@@ -173,7 +161,7 @@ const SlotMachine: React.FC = () => {
         ))}
       </div>
     
-      <div style={{width: "10%", height: "auto"}}>
+      <div style={{width: "auto", height: "25%"}}>
         <RedStick spin={() => {
           roll()
         }}></RedStick>

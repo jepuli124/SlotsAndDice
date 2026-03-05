@@ -1,0 +1,14 @@
+const root = useRef<HTMLDivElement>(null);
+const scope = useRef<Scope>(null);
+
+
+useEffect(() => {
+
+  scope.current = createScope({ root }).add( self => {
+      if(!self){ return }
+  });
+
+  return () => {
+      if(scope.current){ scope.current.revert() }
+  }
+}, []);
