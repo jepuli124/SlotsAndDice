@@ -4,7 +4,7 @@ const scope = useRef<Scope>(null);
 
 useEffect(() => {
 
-  scope.current = createScope({ AnimRefPoint }).add( self => {
+  scope.current = createScope({ root: AnimRefPoint }).add( self => {
       if(!self){ return }
   });
 

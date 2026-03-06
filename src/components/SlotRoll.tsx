@@ -5,13 +5,15 @@ import { RandomCommonSymbol } from '../hooks/RNGSymbolHook'
 import { animate, createScope, cubicBezier, type Scope } from 'animejs'
 
 interface incomingParams {
-  symbols?: string[]
+  symbols?: string[],
+  winningSlots?: number[],
+  slotIndex?: number
 
 }
 
 
 
-const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
+const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 0}) => {
   const AnimRefPoint = useRef<HTMLDivElement>(null);
   const scope = useRef<Scope | null>(null);
   const createSymbolList = (listOfPredeterminedSymbols: (string | undefined)[] = []) => {
@@ -27,9 +29,11 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
 
 
   const preSymbols = useRef<string[]>(symbols ? symbols : []) 
+  const winningSlotsRef = useRef<number[]>(winningSlots ? winningSlots : [])
   const [symbolList, setSymbolList] = useState<{location: number, symbol: string | undefined}[]>(createSymbolList([RandomCommonSymbol(), ...preSymbols.current])) 
   const spinSpeed = 100
-  const SpinPerRoll = 50
+  const spinPerRoll = 50 + (slotIndex * 10)
+  const startDelay = 0 + (slotIndex * 50)
   const [spinAmount, setSpinAmount] = useState<number>(0)
   
   const handleSpinSlot = (spin: number) => {
@@ -40,7 +44,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
     if(spin <= 1){
       scope.current.methods.startSlots(spin);
     }
-    else if (spin < SpinPerRoll) {
+    else if (spin < spinPerRoll) {
       scope.current.methods.spinSlots(spin);
     } else {
       scope.current.methods.stopSlots(spin);
@@ -80,6 +84,11 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
       return createSymbolList(ListOfSymbols)
     }) 
   }
+  const showWinningSlots = () => {
+    if(scope.current && winningSlotsRef.current.length > 0){
+      scope.current.methods.showWinningSlots();   
+    }
+  }
 
   useEffect(() => {
 
@@ -89,6 +98,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
           animate('.slot', {
             y: (spin * spinSpeed) + '%',
             ease: cubicBezier(0.87,-0.646,0.97,0.278),
+            delay: startDelay,
             duration: 1000,
             onBegin: () => {
               addNewSymbol()
@@ -104,10 +114,10 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
             ease: 'none',
             onBegin: () => {
               
-              if(SpinPerRoll-spin > 3){
+              if(spinPerRoll-spin > 3){
                 addNewSymbol()
               } else {
-                addFixedSymbol(SpinPerRoll-spin-1)
+                addFixedSymbol(spinPerRoll-spin-1)
               }
               removeOldSymbol()
             },
@@ -125,6 +135,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
             },
             onComplete: () => {
               resetSlots()
+              showWinningSlots()
             }
           });
         });
@@ -133,6 +144,14 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
             y: 0 + '%',
             ease: 'none',
             duration: 0,
+          });
+        });
+        self.add('showWinningSlots', () => {
+          animate('.winningSlot', {
+            scale: [1, 1.15, 0.75, 1.15, 1],
+            rotate: [0, 30, 0, -30, 0],
+            ease: 'inOut',
+            duration: 1500,
           });
         });
     });
@@ -151,6 +170,10 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
       return 1
     })
 
+  }
+
+  if(winningSlotsRef.current !== winningSlots && winningSlots){
+    winningSlotsRef.current = winningSlots
   }
 
   return (
@@ -180,7 +203,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
         overflow: "hidden"
       }}>
         {symbolList.map((slot, index) => (
-          <div className='slot' key={index} style={{position: 'absolute', top: (100 - (slot.location * 33.333333)) + "%" , width: '80%', display: 'flex', justifyContent: 'center' }}>
+          <div className={winningSlotsRef.current.includes(index-1) ? 'slot winningSlot' : 'slot' } key={index} style={{position: 'absolute', top: (100 - (slot.location * 33.333333)) + "%" , width: '80%', display: 'flex', justifyContent: 'center' }}>
             <SlotSlot Symbol={slot.symbol ? slot.symbol : undefined}/>
           </div>
         ))}

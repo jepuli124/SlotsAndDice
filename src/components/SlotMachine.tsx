@@ -4,6 +4,7 @@ import RedStick from './RedStick'
 import { PatternDetector } from '../hooks/PatternHook'
 import { getFromStore } from '../hooks/StorageHook'
 import { RandomCommonSymbol, RandomRareSymbol, RandomSymbol } from '../hooks/RNGSymbolHook'
+import type { PatternResult } from '../types/PatternTypes'
 
 const ColumnCount = 5 // how many colums are in the slot machine.
 const SlotCount = 3 // how many slots are in the slot machine.
@@ -41,15 +42,26 @@ const SlotMachine: React.FC = () => {
 
   const LoS = useRef<number>(LosCheck()) 
   const [symbols, setSymbol] = useState<string[][] | undefined>(undefined)
-
-  
+  const winningSlots = useRef<number[][]>([])
 
   const checkForPatterns = (lines: string [][]) => {
     const detector = new PatternDetector(lines)
     const result = detector.detectAllPatterns();
     console.log(result)
+    return result
   }
 
+  const markWinningSlots = (result: PatternResult) => {
+    const winningSlotList: number[][] = [[], [], [], [], []]
+    result.wins.forEach((win) => {
+      for (let index = 0; index < win.symbols.length; index++) {
+        if(!winningSlotList[win.symbols[index].col].includes(win.symbols[index].row)){
+          winningSlotList[win.symbols[index].col].push(win.symbols[index].row)
+        }
+      }
+    })
+    winningSlots.current = winningSlotList
+  }
   // const lightshow = () => {
 
   // }
@@ -141,22 +153,23 @@ const SlotMachine: React.FC = () => {
     } else {
       newSymbols = randomCommonSlots()
     }
-    checkForPatterns(newSymbols)
+    const result = checkForPatterns(newSymbols)
+    markWinningSlots(result)
     setSymbol(newSymbols)
-    console.log(newSymbols)
+    //console.log(newSymbols)
   } 
 
 
   if(symbols == undefined){
     roll(true, 7)
   }
-  
+
   return (
     <div style={{display: 'flex',justifyItems: "center", width: "99vw", height: "auto"}}>
       <div style={{ display: 'flex', width: "85%", height: "auto"}}>
       {columnlist.map((_, index) => (
           <div key={index} style={{maxWidth: "20%", height: "auto" }}>
-            <SlotRoll symbols={symbols ? symbols[index] : undefined}></SlotRoll>
+            <SlotRoll symbols={symbols ? symbols[index] : undefined} winningSlots={winningSlots.current[index]} slotIndex={index}></SlotRoll>
           </div>
         ))}
       </div>
