@@ -143,7 +143,7 @@ const SlotMachine: React.FC = () => {
     }
     checkForPatterns(newSymbols)
     setSymbol(newSymbols)
-    //console.log(newSymbols)
+    console.log(newSymbols)
   } 
 
 

@@ -1,10 +1,10 @@
-const root = useRef<HTMLDivElement>(null);
+const AnimRefPoint = useRef<HTMLDivElement>(null);
 const scope = useRef<Scope>(null);
 
 
 useEffect(() => {
 
-  scope.current = createScope({ root }).add( self => {
+  scope.current = createScope({ AnimRefPoint }).add( self => {
       if(!self){ return }
   });
 
@@ -12,3 +12,6 @@ useEffect(() => {
       if(scope.current){ scope.current.revert() }
   }
 }, []);
+
+//Remember to add ref={AnimRefPoint} to 
+//Some div to set where the animation can happen.

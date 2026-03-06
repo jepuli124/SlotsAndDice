@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import SlotSlot from './SlotSlot'
 import '../css/SlotMachine.css'
 import { RandomCommonSymbol } from '../hooks/RNGSymbolHook'
-import { animate, createScope, cubicBezier, utils, type Scope } from 'animejs'
+import { animate, createScope, cubicBezier, type Scope } from 'animejs'
 
 interface incomingParams {
   symbols?: string[]
@@ -12,7 +12,7 @@ interface incomingParams {
 
 
 const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
-  const root = useRef<HTMLDivElement>(null);
+  const AnimRefPoint = useRef<HTMLDivElement>(null);
   const scope = useRef<Scope | null>(null);
   const createSymbolList = (listOfPredeterminedSymbols: (string | undefined)[] = []) => {
     return ([
@@ -30,7 +30,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
   const [symbolList, setSymbolList] = useState<{location: number, symbol: string | undefined}[]>(createSymbolList([RandomCommonSymbol(), ...preSymbols.current])) 
   const spinSpeed = 100
   const SpinPerRoll = 50
-  const [spinAmount, setSpintAmount] = useState<number>(0)
+  const [spinAmount, setSpinAmount] = useState<number>(0)
   
   const handleSpinSlot = (spin: number) => {
     
@@ -53,15 +53,37 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
       return [{location: prev[0].location + 1, symbol: RandomCommonSymbol()}, ...prev]
     })
   }
+  const addFixedSymbol = (index: number) => {
+    setSymbolList(prev => {
+      return [{location: prev[0].location + 1, symbol: preSymbols.current[index]}, ...prev]
+    })
+  }
   const removeOldSymbol = () => {
     setSymbolList(prev => {
       return [ ...prev.slice(0, -1)]
     })
   }
+  const resetSlots = () => { // to prevent slots shifting, altought (spin/3) in animation should fix it.
+    
+    setSymbolList(prev => {
+      const ListOfSymbols = []
+      for (let index = 0; index < prev.length; index++) {
+        ListOfSymbols.push(prev[index].symbol);
+        
+      }
+      if(scope.current){
+        scope.current.methods.resetSlots();   
+        //This and setSpinAmount are here to force them to update 
+        //simultaniously on same frame to prevent the slots from blinking
+      }
+      setSpinAmount(0)
+      return createSymbolList(ListOfSymbols)
+    }) 
+  }
 
   useEffect(() => {
 
-    scope.current = createScope({ root }).add( self => {
+    scope.current = createScope({ root: AnimRefPoint }).add( self => {
         if(!self){ return }
         self.add('startSlots', (spin: number) => {
           animate('.slot', {
@@ -77,11 +99,16 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
         });
         self.add('spinSlots', (spin: number) => {
           animate('.slot', {
-            y: (spin * spinSpeed) + '%',
+            y: (spin * spinSpeed) - (spin/3)  + '%', //-(spin/3) fixes rounding errors that causes animation to shift.
             duration: 50,
             ease: 'none',
             onBegin: () => {
-              addNewSymbol()
+              
+              if(SpinPerRoll-spin > 3){
+                addNewSymbol()
+              } else {
+                addFixedSymbol(SpinPerRoll-spin-1)
+              }
               removeOldSymbol()
             },
             onComplete: () => handleSpinSlot(spin + 1)
@@ -89,14 +116,23 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
         });
         self.add('stopSlots', (spin: number) => {
           animate('.slot', {
-            y: (spin * spinSpeed) + '%',
+            y: (spin * spinSpeed) - (spin/3) + '%', //-(spin/3) fixes rounding errors that causes animation to shift.
             ease: cubicBezier(0.044,0.704,0.207,1.877),
             duration: 1000,
             onBegin: () => {
               addNewSymbol()
               removeOldSymbol()
             },
-            onComplete: () => {setSpintAmount(0)}
+            onComplete: () => {
+              resetSlots()
+            }
+          });
+        });
+        self.add('resetSlots', () => {
+          animate('.slot', {
+            y: 0 + '%',
+            ease: 'none',
+            duration: 0,
           });
         });
     });
@@ -110,7 +146,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
 
   if(preSymbols.current !== symbols && spinAmount == 0){
     preSymbols.current = symbols ? symbols : []
-    setSpintAmount(() => {
+    setSpinAmount(() => {
       handleSpinSlot(1)
       return 1
     })
@@ -118,7 +154,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
   }
 
   return (
-    <div ref={root} 
+    <div ref={AnimRefPoint} 
       style={{ 
       position: 'relative', 
       display: 'inline-block', 
@@ -144,7 +180,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
         overflow: "hidden"
       }}>
         {symbolList.map((slot, index) => (
-          <div className='slot' key={index} style={{position: 'absolute', top: (100 - (slot.location * 33.33)) + "%" , width: '80%', display: 'flex', justifyContent: 'center' }}>
+          <div className='slot' key={index} style={{position: 'absolute', top: (100 - (slot.location * 33.333333)) + "%" , width: '80%', display: 'flex', justifyContent: 'center' }}>
             <SlotSlot Symbol={slot.symbol ? slot.symbol : undefined}/>
           </div>
         ))}
