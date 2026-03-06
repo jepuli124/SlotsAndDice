@@ -151,7 +151,8 @@ const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 
             scale: [1, 1.15, 0.75, 1.15, 1],
             rotate: [0, 30, 0, -30, 0],
             ease: 'inOut',
-            duration: 1500,
+            duration: 1500
+
           });
         });
     });
@@ -204,7 +205,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 
       }}>
         {symbolList.map((slot, index) => (
           <div className={winningSlotsRef.current.includes(index-1) ? 'slot winningSlot' : 'slot' } key={index} style={{position: 'absolute', top: (100 - (slot.location * 33.333333)) + "%" , width: '80%', display: 'flex', justifyContent: 'center' }}>
-            <SlotSlot Symbol={slot.symbol ? slot.symbol : undefined}/>
+            <SlotSlot symbol={slot.symbol ? slot.symbol : undefined}/>
           </div>
         ))}
       </div>

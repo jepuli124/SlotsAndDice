@@ -112,7 +112,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols}) => {
       }}>
         {locationList.map((slot, index) => (
           <div key={index} style={{position: 'absolute', top: slot.location + slotShift.current + "%" , width: '80%', display: 'flex', justifyContent: 'center' }}>
-            <SlotSlot Symbol={symbolList.current[index].symbol ? symbolList.current[index].symbol : undefined}/>
+            <SlotSlot symbol={symbolList.current[index].symbol ? symbolList.current[index].symbol : undefined}/>
           </div>
         ))}
       </div>
