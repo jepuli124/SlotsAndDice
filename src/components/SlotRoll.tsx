@@ -35,7 +35,8 @@ const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 
   const spinPerRoll = 50 + (slotIndex * 10)
   const startDelay = 0 + (slotIndex * 50)
   const [spinAmount, setSpinAmount] = useState<number>(0)
-  
+  const spinSymbol = useRef<boolean>(false)
+
   const handleSpinSlot = (spin: number) => {
     
     if(!scope.current){
@@ -148,10 +149,12 @@ const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 
         });
         self.add('showWinningSlots', () => {
           animate('.winningSlot', {
-            scale: [1, 1.15, 0.75, 1.15, 1],
-            rotate: [0, 30, 0, -30, 0],
+            scale: [1, 1.05, 0.95, 1.05, 1],
+            //rotate: [0, 30, 0, -30, 0],
             ease: 'inOut',
-            duration: 1500
+            duration: 500,
+            onBegin: () => spinSymbol.current = true,
+            onComplete: () => spinSymbol.current = false
 
           });
         });
@@ -205,7 +208,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 
       }}>
         {symbolList.map((slot, index) => (
           <div className={winningSlotsRef.current.includes(index-1) ? 'slot winningSlot' : 'slot' } key={index} style={{position: 'absolute', top: (100 - (slot.location * 33.333333)) + "%" , width: '80%', display: 'flex', justifyContent: 'center' }}>
-            <SlotSlot symbol={slot.symbol ? slot.symbol : undefined}/>
+            <SlotSlot symbol={slot.symbol ? slot.symbol : undefined} playAnim={winningSlotsRef.current.includes(index-1) && spinSymbol.current}/>
           </div>
         ))}
       </div>
