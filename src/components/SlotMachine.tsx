@@ -5,6 +5,9 @@ import { PatternDetector } from '../hooks/PatternHook'
 import { getFromStore } from '../hooks/StorageHook'
 import { RandomCommonSymbol, RandomRareSymbol, RandomSymbol } from '../hooks/RNGSymbolHook'
 import type { PatternResult } from '../types/PatternTypes'
+import paths from '../const/Symbol'
+import WinningsBoard from './WinningsBoard'
+import ScoreBoard from './ScoreBoard'
 
 const ColumnCount = 5 // how many colums are in the slot machine.
 const SlotCount = 3 // how many slots are in the slot machine.
@@ -39,7 +42,7 @@ const LosCheck = () => {
 
 const SlotMachine: React.FC = () => {
   
-
+  const {imagePaths} = paths
   const LoS = useRef<number>(LosCheck()) 
   const [symbols, setSymbol] = useState<string[][] | undefined>(undefined)
   const winningSlots = useRef<number[][]>([])
@@ -165,22 +168,93 @@ const SlotMachine: React.FC = () => {
   }
 
   return (
-    <div style={{display: 'flex',justifyItems: "center", width: "99vw", height: "auto"}}>
-      <div style={{ display: 'flex', width: "85%", height: "auto"}}>
-      {columnlist.map((_, index) => (
-          <div key={index} style={{maxWidth: "20%", height: "auto" }}>
-            <SlotRoll symbols={symbols ? symbols[index] : undefined} winningSlots={winningSlots.current[index]} slotIndex={index}></SlotRoll>
-          </div>
-        ))}
+    <div style={{position: 'relative', display: 'inline-block', width: "100vw", height: "auto"}}>
+      <img src={imagePaths["SlotMachine"]} style={{display: 'block', height: "auto", width: "90vw"}}></img>
+      <div style={{
+          position: 'absolute',
+          inset: 0,
+          top: "4.5%",
+          left: "5%",
+          justifyItems: 'left',
+          width: '80%',
+          height: 'auto',
+        }}>
+          <WinningsBoard></WinningsBoard>
       </div>
-    
-      <div style={{width: "auto", height: "25%"}}>
-        <RedStick spin={() => {
-          roll()
-        }}></RedStick>
+      <div style={{
+          position: 'absolute',
+          inset: 0,
+          top: "70.5%",
+          left: "5%",
+          justifyItems: 'left',
+          width: '80%',
+          height: 'auto',
+        }}>
+          <ScoreBoard></ScoreBoard>
+      </div>
+      <div style={{ // needs to be top most div here (lowest on code) for interactions to work. The size of the div captures whole screen's input.
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          top: "27.5%",
+          flexDirection: 'row',
+          alignItems: 'stretch',
+          width: '100%',
+          height: 'fit-content',
+          overflow: 'hidden',
+        }}>
+        <div style={{
+            display: 'flex',
+            flex: '1 1 0%',
+            width: '100%',
+            height: 'auto',
+            alignItems: 'stretch',
+            justifyContent: 'center',
+            paddingLeft: '6%',
+            paddingRight: '3.75%',
+            boxSizing: 'border-box',
+          }}
+        >
+          {columnlist.map((_, index) => (
+            <div
+              key={index}
+              style={{
+                flex: '1 1 0%',
+                minWidth: 0,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                justifyContent: 'center',
+                overflow: 'hidden',
+              }}
+            >
+              <SlotRoll
+                symbols={symbols ? symbols[index] : undefined}
+                winningSlots={winningSlots.current[index]}
+                slotIndex={index}
+              />
+            </div>
+          ))}
+        </div>
+        <div
+          style={{
+            flex: '0 0 auto',
+            alignSelf: 'center',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <RedStick
+            spin={() => {
+              roll()
+            }}
+          />
+        </div>
       </div>
       
     </div>
+    
   )
 }
 

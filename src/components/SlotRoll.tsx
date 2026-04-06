@@ -71,7 +71,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 
   const resetSlots = () => { // to prevent slots shifting, altought (spin/3) in animation should fix it.
     
     setSymbolList(prev => {
-      const ListOfSymbols = []
+      const ListOfSymbols: (string | undefined)[] = []
       for (let index = 0; index < prev.length; index++) {
         ListOfSymbols.push(prev[index].symbol);
         
@@ -184,9 +184,10 @@ const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 
     <div ref={AnimRefPoint} 
       style={{ 
       position: 'relative', 
-      display: 'inline-block', 
-      width: 'fit-content', // Container shrinks to fit content
-      height: 'fit-content',
+      display: 'block', 
+      width: '100%',
+      maxWidth: '100%',
+      height: 'auto',
      }}>
       <img src="./SlotRoller.png" alt="" style={{
         width: "100%", 

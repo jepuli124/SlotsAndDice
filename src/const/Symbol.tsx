@@ -23,7 +23,11 @@ const imagePaths: stringDict = {
     "Roller" : "./SlotRoller.png",
     "Slot" : "./SlotSlot.png",
     "Star" : "./Star.png",
-    "Glass" : "./WineGlass.png"
+    "Glass" : "./WineGlass.png",
+    "SlotMachine" : "./slotMachine.png",
+    "WinBoard" : "./winningsBoard.png",
+    "ScoreBoard" : "./ScoreBoard.png",
+
 }
 
 const imageNameList = [

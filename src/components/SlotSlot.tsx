@@ -57,7 +57,7 @@ const SlotSlot: React.FC<incomingParams> = ({ symbol, playAnim = false }) => {
          <div  style={{ position: 'relative', display: 'inline-block', width: "100%", height: "auto"}} 
          ref={AnimRefPoint}
          >
-        <img src={imagePaths["Slot"]} alt="" style={{ display: 'block', alignSelf: "center", width: "100%", height: "auto" }}/>
+        <img src={imagePaths["Slot"]} alt="" style={{ display: 'block', alignSelf: "center", width: "100%", height: "auto", marginLeft: "1%" }}/>
         <div 
           style={{
             position: 'absolute',
