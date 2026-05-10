@@ -1,5 +1,6 @@
 import { animate, createScope, type Scope } from 'animejs';
 import React, { useEffect, useRef } from 'react'
+import path from '../const/Symbol';
 
 interface incomingParams{
     spin?: () => void
@@ -7,6 +8,7 @@ interface incomingParams{
 
 const RedStick: React.FC<incomingParams> = ({ spin = () => {} }) => {
     const rotate = useRef<boolean>(false)
+    const { imagePaths } = path
 
     const AnimRefPoint = useRef<HTMLDivElement>(null);
     const scope = useRef<Scope>(null);
@@ -58,7 +60,16 @@ const RedStick: React.FC<incomingParams> = ({ spin = () => {} }) => {
     <div 
     ref={AnimRefPoint}
     onClick={() => RunHandler()}>
-      <img src="./RedStick.png" alt="red stick" className='redStick' style={{height: "25vw", transformOrigin: "10% 100%"}}/>
+      <div style={{position: 'relative', display: 'inline-block'}}>
+          <img src={imagePaths["LeverPouch2"]} style={{display: 'block', height: "25vw"}}></img>
+          <div style={{ position: 'absolute', inset: 0, top: "-10vw" }}>
+            <img draggable={false} src={imagePaths["RedStick"]} alt="red stick" className='redStick' style={{height: "25vw", transformOrigin: "10% 100%"}}/>
+          </div>
+          <div draggable={false} style={{ position: 'absolute', inset: 0 }}>
+            <img draggable={false} src={imagePaths["LeverPouch"]} style={{height: "25vw"}}/>
+          </div>
+      </div>
+      
     </div>
   )
 }

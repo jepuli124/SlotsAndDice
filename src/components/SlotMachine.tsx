@@ -8,6 +8,8 @@ import type { PatternResult } from '../types/PatternTypes'
 import paths from '../const/Symbol'
 import WinningsBoard from './WinningsBoard'
 import ScoreBoard from './ScoreBoard'
+import BetButtons from './BetButtons'
+import Info from './Info'
 
 const ColumnCount = 5 // how many colums are in the slot machine.
 const SlotCount = 3 // how many slots are in the slot machine.
@@ -46,6 +48,7 @@ const SlotMachine: React.FC = () => {
   const LoS = useRef<number>(LosCheck()) 
   const [symbols, setSymbol] = useState<string[][] | undefined>(undefined)
   const winningSlots = useRef<number[][]>([])
+  const [bet, setBet] = useState<number>(0)
 
   const checkForPatterns = (lines: string [][]) => {
     const detector = new PatternDetector(lines)
@@ -187,19 +190,42 @@ const SlotMachine: React.FC = () => {
           top: "70.5%",
           left: "5%",
           justifyItems: 'left',
-          width: '80%',
-          height: 'auto',
+          width: 'fit-content',
+          height: 'fit-content',
         }}>
-          <ScoreBoard></ScoreBoard>
+          <ScoreBoard currentBet={bet}></ScoreBoard>
+      </div>
+      <div style={{
+          position: 'absolute',
+          inset: 0,
+          top: "77.7%",
+          left: "5%",
+          justifyItems: 'left',
+          width: 'fit-content', // currently 0x0, might cause problems
+          height: 'fit-content',
+        }}>
+          <BetButtons changeBet={(newBet: number) => {setBet(newBet)}}></BetButtons>
+      </div>
+      <div style={{
+          position: 'absolute',
+          inset: 0,
+          top: "69%",
+          left: "50%",
+          justifyItems: 'left',
+          width: 'fit-content', // currently 0x0, might cause problems
+          height: 'fit-content',
+        }}>
+          <Info></Info>
       </div>
       <div style={{ // needs to be top most div here (lowest on code) for interactions to work. The size of the div captures whole screen's input.
           position: 'absolute',
           inset: 0,
           display: 'flex',
           top: "27.5%",
+          left: "0.85%",
           flexDirection: 'row',
           alignItems: 'stretch',
-          width: '100%',
+          width: '86vw',
           height: 'fit-content',
           overflow: 'hidden',
         }}>
@@ -237,13 +263,18 @@ const SlotMachine: React.FC = () => {
             </div>
           ))}
         </div>
-        <div
+        
+      </div>
+      <div
           style={{
-            flex: '0 0 auto',
-            alignSelf: 'center',
-            display: 'flex',
-            alignItems: 'center'
-          }}
+            position: 'absolute',
+            inset: 0,
+            top: "34%",
+            left: "84.4%",
+            justifyItems: 'left',
+            width: 'fit-content', // currently 0x0, might cause problems
+            height: 'fit-content',
+            }}
         >
           <RedStick
             spin={() => {
@@ -251,8 +282,6 @@ const SlotMachine: React.FC = () => {
             }}
           />
         </div>
-      </div>
-      
     </div>
     
   )

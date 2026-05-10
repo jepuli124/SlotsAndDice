@@ -116,7 +116,7 @@ export class PatternDetector {
       }
 
       // Check for 3+ matching symbols in a row
-      if (symbolTypes.size === 1) {
+      if (symbolTypes.size === 1 && !line.name.includes("Diamond")) {
         // 5 of a kind
         wins.push({
           pattern: `Five of a Kind - ${line.name}`,
@@ -138,9 +138,9 @@ export class PatternDetector {
           });
         }
         if(sequence.length >= 4 && line.name.includes("Diamond")){
-          const multiplier = sequence.length === 4 ? 5 : 1;
+          const multiplier = sequence.length === 4 ? 6 : 1;
           wins.push({
-            pattern: `${sequence.length} in a Row - ${line.name}`,
+            pattern: `${sequence.length} in a Diamond shape - ${line.name}`,
             symbols: sequence,
             multiplier,
             description: `${sequence.length} matching symbols on ${line.name}!`

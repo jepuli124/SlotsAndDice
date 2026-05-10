@@ -12,6 +12,26 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+
+}
+
+@font-face {
+  font-family: 'grabstein';
+  src: local('grabstein'), url(./fonts/grabstein.otf) format('opentype');
+  font-family: 'knive';
+  src: local('knive'), url(./fonts/Knive.otf) format('opentype');
+  font-family: 'liber-struct';
+  src: local('liber-struct'), url(./fonts/iber-struct.ttf) format('truetype');
+  font-family: 'moonlitflow';
+  src: local('moonlitflow'), url(./fonts/MoonLitFlow-Regular.ttf) format('truetype');
+    font-family: 'moonlitflow-italic';
+  src: local('moonlitflow-italic'), url(./fonts/MoonLitFlow-Italic.ttf) format('truetype');
+  font-family: 'thernaly';
+  src: local('thernaly'), url(./fonts/Thernaly-Regular.ttf) format('truetype');
+  font-family: 'thernaly-italic';
+  src: local('thernaly-italic'), url(./fonts/Thernaly-Italic.ttf) format('truetype');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
 }
 
 a {

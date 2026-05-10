@@ -192,7 +192,7 @@ const SlotRoll: React.FC<incomingParams> = ({symbols, winningSlots, slotIndex = 
       <img src="./SlotRoller.png" alt="" style={{
         width: "100%", 
         height: "auto", 
-        display: "block" }} />
+        display: "block" }} draggable={false} />
       <div style={{
         display: 'flex',
         flexDirection: 'column',

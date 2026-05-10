@@ -27,6 +27,17 @@ const imagePaths: stringDict = {
     "SlotMachine" : "./slotMachine.png",
     "WinBoard" : "./winningsBoard.png",
     "ScoreBoard" : "./ScoreBoard.png",
+    "Bet1" : "./Button1.png",
+    "Bet5" : "./Button5.png",
+    "Bet25" : "./Button25.png",
+    "BetBase" : "./ButtonBase.png",
+    "Info" : "./info.png",
+    "LeverPouch" : "./LeverPouch.png",
+    "LeverPouch2" : "./LeverPouch2.png",
+    "SpeedMeter" : "./SpeedMeter.png",
+    "TheThing" : "./SpeedThing.png",
+    "Turner" : "./MeterThing.png",
+    "RedStick" : "./RedStick.png"
 
 }
 

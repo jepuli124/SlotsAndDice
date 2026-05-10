@@ -1,4 +1,4 @@
-import { animate, createScope, splitText, type Scope } from 'animejs';
+import { animate, createScope, type Scope } from 'animejs';
 import React, { useEffect, useRef, useState } from 'react'
 import paths from '../const/Symbol'
 
@@ -65,9 +65,9 @@ const WinningsBoard: React.FC<incomingParams> = () => {
     return (
     <div ref={AnimRefPoint}>
         <div style={{position: 'relative', display: 'inline-block'}}>
-            <img src={imagePaths["WinBoard"]} style={{display: 'block', width: "80vw"}}></img>
+            <img src={imagePaths["WinBoard"]} style={{display: 'block', width: "80vw"}} draggable={false}></img>
             <div style={{ position: 'absolute', inset: 0, alignContent: 'center', height: "100%", overflow: 'hidden' }}>
-                <p style={{top: "-10vh"}} className='WinBoardText'>{winText}</p> 
+                <p style={{top: "-10vh", fontFamily: "thernaly", fontSize: "2.4vw", color: "#d3d600"}} className='WinBoardText'>{winText}</p> 
             </div>
         </div>
     </div>

@@ -57,7 +57,7 @@ const SlotSlot: React.FC<incomingParams> = ({ symbol, playAnim = false }) => {
          <div  style={{ position: 'relative', display: 'inline-block', width: "100%", height: "auto"}} 
          ref={AnimRefPoint}
          >
-        <img src={imagePaths["Slot"]} alt="" style={{ display: 'block', alignSelf: "center", width: "100%", height: "auto", marginLeft: "1%" }}/>
+        <img src={imagePaths["Slot"]} alt="" style={{ display: 'block', alignSelf: "center", width: "100%", height: "auto", marginLeft: "1%" }} draggable={false}/>
         <div 
           style={{
             position: 'absolute',
@@ -72,7 +72,7 @@ const SlotSlot: React.FC<incomingParams> = ({ symbol, playAnim = false }) => {
             scope.current.methods.spinSymbol()
           }}}
         >
-            {symbol ? <img  src={imagePaths[symbol]} alt="" className='slotSymbol'  
+            {symbol ? <img draggable={false} src={imagePaths[symbol]} alt="" className='slotSymbol'  
             style={{
               //transform: 'translate(0%, 10%)', This brakes css stuff which makes animation harder.
               marginTop: '5%',
