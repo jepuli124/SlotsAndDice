@@ -53,13 +53,13 @@ const WinningsBoard: React.FC<incomingParams> = () => {
     }
     }, []);
 
-    const playAnimation = () => {
-        if(scope.current && !isAnimationPlaying.current){
-            scope.current.methods.HelloText()
-            return true
-        }  
-        return false
-    }
+    // const playAnimation = () => {
+    //     if(scope.current && !isAnimationPlaying.current){
+    //         scope.current.methods.HelloText()
+    //         return true
+    //     }  
+    //     return false
+    // }
     
 
     return (
